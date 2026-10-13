@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Parsing YAML ristretto e JSON Schema Draft 2020-12 (S03). -->
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="JsonSchema.Net" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Gli schemi normativi restano in docs/06-contracts: inclusi come risorsa, non copiati. -->
+    <EmbeddedResource Include="..\..\resources\contracts\config.schema.json"
+                      LogicalName="PA.Router.Registry.Loading.Schemas.config.schema.json" />
+    <EmbeddedResource Include="..\..\resources\contracts\registry.schema.json"
+                      LogicalName="PA.Router.Registry.Loading.Schemas.registry.schema.json" />
+    <EmbeddedResource Include="..\..\resources\contracts\policy.schema.json"
+                      LogicalName="PA.Router.Registry.Loading.Schemas.policy.schema.json" />
+    <EmbeddedResource Include="..\..\resources\contracts\plugin.schema.json"
+                      LogicalName="PA.Router.Registry.Loading.Schemas.plugin.schema.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Esempi installabili da 'pa init': sono gli stessi file del pacchetto contratti. -->
+    <EmbeddedResource Include="..\..\resources\contracts\examples\config.yaml"
+                      LogicalName="PA.Router.Registry.Bootstrap.Examples.config.yaml" />
+    <EmbeddedResource Include="..\..\resources\contracts\examples\registry.yaml"
+                      LogicalName="PA.Router.Registry.Bootstrap.Examples.registry.yaml" />
+    <!-- I profili consegnati: ogni altro YAML degli esempi, per cartella. Nessun nome di profilo nel progetto ne' nel
+         codice (24 settembre 2026): quali installare lo dice `policyFiles` della configurazione consegnata. -->
+    <EmbeddedResource Include="..\..\resources\contracts\examples\*.yaml"
+                      Exclude="..\..\resources\contracts\examples\config.yaml;..\..\resources\contracts\examples\registry.yaml"
+                      LogicalName="PA.Router.Registry.Bootstrap.Examples.Policies.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

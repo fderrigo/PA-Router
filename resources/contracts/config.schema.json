@@ -1,0 +1,505 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "it",
+        "es",
+        "pt",
+        "ru",
+        "fr"
+      ],
+      "default": "en"
+    },
+    "schemaVersion": {
+      "const": 2
+    },
+    "defaultProfileId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "policyFiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "registryFile": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "contentMode": {
+      "type": "string",
+      "enum": [
+        "memory_only",
+        "encrypted"
+      ]
+    },
+    "preferSubscription": {
+      "type": "boolean"
+    },
+    "api": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "host": {
+          "const": "127.0.0.1"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535
+        },
+        "serviceProfileId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        },
+        "serviceTokenRef": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "host",
+        "port",
+        "serviceProfileId",
+        "serviceTokenRef",
+        "projectId"
+      ]
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exporter": {
+          "type": "string",
+          "enum": [
+            "none",
+            "otlp"
+          ]
+        },
+        "endpoint": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "exporter",
+        "endpoint"
+      ]
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auditDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "contentDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7
+        },
+        "eventHours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 24
+        }
+      },
+      "required": [
+        "auditDays",
+        "contentDays",
+        "eventHours"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxConcurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "description": "Tempo massimo senza ricevere nulla dal servizio, in secondi: prima della prima parola o fra due pezzi della risposta (23 settembre 2026; prima era la durata totale del turno, e le risposte lunghe dei modelli locali venivano buttate mentre scorrevano).",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "maxInputBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65536,
+          "description": "Byte UTF-8 massimi dell'input; assente vale 65536. Fino al 24 settembre 2026 stava nel profilo (ADR-032, fase 2): ora vale per ogni modalita'."
+        },
+        "maxContextBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 524288,
+          "description": "Byte UTF-8 massimi del contesto (cronologia, ricordi, allegati); assente vale 524288. Prima stava nel profilo (ADR-032, fase 2)."
+        },
+        "maxOutputBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 524288,
+          "description": "Byte UTF-8 massimi della risposta; assente vale 524288. Prima stava nel profilo (ADR-032, fase 2)."
+        },
+        "historyTurns": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64,
+          "description": "Turni precedenti rimandati al servizio con ogni richiesta; assente vale 8. Le API di chat sono senza stato, quindi questo numero e' cio' che si paga in token su un servizio a consumo. Zero: ogni richiesta parte da sola."
+        },
+        "maxCostPerRequest": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Spesa massima per richiesta, nella valuta dei prezzi del registro (ADR-032, fase 5); assente: nessun tetto. Un servizio che su quella richiesta puo' costare di piu' (token stimati in ingresso, uscita limitata da maxOutputTokens del servizio) resta fuori con COST_LIMIT, anche nel secondo tentativo; un servizio di terzi senza prezzo resta fuori, perche' non si puo' dimostrare che ci stia sotto. I servizi senza costo a consumo (abbonamento, macchine dell'operatore) passano sempre."
+        }
+      },
+      "required": [
+        "maxConcurrency",
+        "timeoutSeconds",
+        "maxAttempts"
+      ]
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "topK": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Ricordi iniettati al massimo in un turno, e restituiti da una ricerca. Il massimo e' 10 perche' oltre quel numero il prodotto non consegna: la rilettura dei corpi e' limitata a dieci identificatori per chiamata, e un valore superiore darebbe comunque dieci ricordi senza dirlo. Il budget di 8 KiB dell'auto-injection puo' tagliare prima, se i ricordi sono lunghi."
+        },
+        "maxChunksPerProject": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20000
+        },
+        "cacheMiB": {
+          "type": "integer",
+          "minimum": 32,
+          "maximum": 256
+        },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3650
+        },
+        "embeddingServiceId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z][a-z0-9-]{0,63}$",
+          "description": "Servizio con capacita' embedding; null lascia la ricerca lessicale dichiarata."
+        },
+        "maxEmbeddingDimension": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096,
+          "default": 2048,
+          "description": "Dimensione massima dei vettori ammessa da questa installazione. Quanto costa un vettore lungo dipende dalla macchina, non dal prodotto: chi ha piu' memoria puo' alzarlo e usare modelli piu' capaci. Assente significa 2048. Il massimo di 4096 e' strutturale e nessuna configurazione lo supera."
+        }
+      },
+      "required": [
+        "enabled",
+        "required",
+        "topK",
+        "maxChunksPerProject",
+        "cacheMiB",
+        "retentionDays"
+      ]
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "pluginRoot": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "allowExecutableTools": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "pluginRoot",
+        "allowExecutableTools"
+      ]
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Strumenti delle applicazioni esterne (ADR-020). Assente significa spenti. I limiti valgono per ogni turno e il profilo puo' solo restringerli.",
+      "required": [
+        "enabled",
+        "limits"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maxRounds",
+            "maxCallsPerRound",
+            "maxCalls",
+            "callTimeoutSeconds",
+            "maxResultBytes"
+          ],
+          "properties": {
+            "maxRounds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            },
+            "maxCallsPerRound": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            },
+            "maxCalls": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64
+            },
+            "callTimeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 120
+            },
+            "maxResultBytes": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 262144
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "maxItems": 16,
+          "description": "Sorgenti degli strumenti dell'operatore, usate quando l'applicazione non ne indica. Solo qui una sorgente puo' essere un programma stdio.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "mcp",
+                  "openapi",
+                  "mcp-stdio"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "maxLength": 2048
+              },
+              "command": {
+                "type": "string",
+                "maxLength": 1024
+              },
+              "arguments": {
+                "type": "array",
+                "maxItems": 32,
+                "items": {
+                  "type": "string",
+                  "maxLength": 256
+                }
+              }
+            }
+          }
+        },
+        "attestations": {
+          "type": "array",
+          "maxItems": 512,
+          "description": "Attestazioni dell'operatore, per strumento e impronta, con scadenza.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "tool",
+              "fingerprint",
+              "accepts",
+              "returns",
+              "by",
+              "expiresAt"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "tool": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]{1,128}$"
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "accepts": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "sensitive"
+                ]
+              },
+              "returns": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "sensitive"
+                ]
+              },
+              "regions": {
+                "type": "array",
+                "maxItems": 32,
+                "items": {
+                  "type": "string",
+                  "maxLength": 8
+                }
+              },
+              "placement": {
+                "type": "string",
+                "enum": [
+                  "loopback",
+                  "lan",
+                  "private_remote",
+                  "third_party"
+                ]
+              },
+              "by": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "revoked": {
+          "type": "array",
+          "maxItems": 512,
+          "description": "Strumenti revocati dall'operatore: non si usano, qualunque cosa dichiari un'applicazione.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "tool"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "tool": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]{1,128}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Analisi della richiesta: budget del rilevatore PII e analizzatore. Dal 24 settembre 2026 non porta piu' le soglie per difficolta' ('bands', ADR-032 fase 3): la qualita' e' il posto nell'ordine dei modelli e la finestra che una richiesta pretende si calcola dalla sua dimensione, mai sotto 4096 token. Un file che le porta ancora si converte con 'pa config migrate'.",
+      "properties": {
+        "piiLatencyBudgetMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60000,
+          "description": "Budget per il rilevamento PII inline. Oltre il budget stimato il servizio viene usato solo sul percorso della memoria, in sottofondo (PRIVACY.md v2). Gli allegati hanno ottanta volte questo budget (1500 ms fanno due minuti): dal 24 settembre 2026 non si dichiara piu' a parte (ADR-032, fase 2)."
+        },
+        "analyzer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "serviceId"
+          ],
+          "description": "Analizzatore della richiesta (ADR-026): un modello linguistico piccolo del registro, con capacita' request-analysis, su loopback, che estrae i segnali del profilo di domanda. Assente significa spento, presente acceso. Decide (ADR-031: livello richiesto dal profilo di domanda, scelta del minimo sufficiente, e il piu' capace fra gli ammessi dichiarato quando nessuno basta) solo per un modello e una versione del prompt con un esito del benchmark consegnato; altrimenti gira in ombra, da solo. Dal 24 settembre 2026 non c'e' piu' un campo 'mode' (ADR-032, fase 2).",
+          "properties": {
+            "serviceId": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,63}$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "defaultProfileId",
+    "policyFiles",
+    "registryFile",
+    "contentMode",
+    "preferSubscription",
+    "api",
+    "telemetry",
+    "retention",
+    "limits",
+    "memory",
+    "extensions",
+    "routing"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PA Router config v1"
+}

@@ -1,0 +1,28 @@
+# Build
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+# Test/verify output
+TestResults/
+eng/out/
+
+# Evidenze locali non versionate (i report firmati vanno in docs/07-delivery/evidence)
+*.trx.tmp
+
+# Segreti e dati: mai nel repository (GIT-CONVENTIONS)
+*.pfx
+*.key
+*.pem
+.env
+.env.*
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+commit-msg.tmp

@@ -1,0 +1,508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pa-router.local/schemas/registry.schema.json",
+  "title": "Registro dei servizi",
+  "description": "Elenco dei servizi che il router puo' usare, uno per capacita' offerta. Nessun nome di modello compare nel codice: cio' che il router puo' usare e' esattamente cio' che questo file dichiara (ADR-015).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "revision",
+    "services"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "services": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "capability",
+          "adapter",
+          "enabled",
+          "inferencePlacement"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 60,
+            "description": "Nome dato dall'operatore all'istanza, mostrato al posto dell'identificatore. Non sostituisce l'id: a quello sono legate conferme, permessi e allowlist, e rinominarlo le scollegherebbe. Assente significa che la resa calcola un nome predefinito dall'adattatore e dalla collocazione."
+          },
+          "capability": {
+            "type": "string",
+            "enum": [
+              "chat",
+              "embedding",
+              "pii-detection",
+              "sensitive-category-detection",
+              "summarize",
+              "rerank",
+              "code-agent",
+              "request-analysis"
+            ]
+          },
+          "adapter": {
+            "type": "string",
+            "enum": [
+              "ollama",
+              "ollama-embed",
+              "openai-compatible",
+              "anthropic",
+              "onnx-local",
+              "deterministic",
+              "codex-cli",
+              "claude-code-cli",
+              "opencode-cli"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "inferencePlacement": {
+            "type": "string",
+            "enum": [
+              "loopback",
+              "lan",
+              "private_remote",
+              "third_party"
+            ]
+          },
+          "endpoint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "executable": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          },
+          "arguments": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "maxLength": 256
+            }
+          },
+          "environment": {
+            "type": "object",
+            "maxProperties": 8,
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 512
+            }
+          },
+          "model": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 128
+          },
+          "dimension": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 4096
+          },
+          "fingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 256
+          },
+          "authMode": {
+            "type": "string",
+            "enum": [
+              "none",
+              "subscription",
+              "api_key"
+            ]
+          },
+          "secretRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "capabilities": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "chat",
+                "code_read",
+                "file_write",
+                "shell"
+              ]
+            }
+          },
+          "controls": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "closed_payload",
+                "local_inference",
+                "native_agent",
+                "workspace_write",
+                "shell_control",
+                "config_isolated",
+                "no_nested_tools",
+                "no_persistent_transcript",
+                "no_nested_fallback",
+                "processing_agreement"
+              ]
+            }
+          },
+          "processingRegions": {
+            "$comment": "Paese ISO 3166-1 alpha-2 minuscolo, oppure un gruppo che il router espande (eu, eea). Un elenco vuoto non significa eu: significa luogo non dichiarato. Decide solo se una macchina propria fuori sede (private_remote) sta nella zona private_eu (ADR-032, fase 4).",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^(eea|[a-z]{2})$"
+            }
+          },
+          "attestations": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Conferme dell'operatore, una per garanzia: chi l'ha data e quando. Dal 25 settembre 2026 (ADR-032, fase 4) una conferma non scade: vale finche' l'operatore non la toglie, e ogni anno doctor e l'avvio ricordano di ricontrollarla.",
+            "properties": {
+              "closed_payload": {
+                "$ref": "#/$defs/attestation"
+              },
+              "local_inference": {
+                "$ref": "#/$defs/attestation"
+              },
+              "native_agent": {
+                "$ref": "#/$defs/attestation"
+              },
+              "workspace_write": {
+                "$ref": "#/$defs/attestation"
+              },
+              "shell_control": {
+                "$ref": "#/$defs/attestation"
+              },
+              "config_isolated": {
+                "$ref": "#/$defs/attestation"
+              },
+              "no_nested_tools": {
+                "$ref": "#/$defs/attestation"
+              },
+              "no_persistent_transcript": {
+                "$ref": "#/$defs/attestation"
+              },
+              "no_nested_fallback": {
+                "$ref": "#/$defs/attestation"
+              },
+              "processing_agreement": {
+                "$ref": "#/$defs/attestation"
+              }
+            }
+          },
+          "contextWindowTokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "maxOutputTokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "maxConcurrent": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "throughputKibPerSecond": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "nativeSession": {
+            "type": "boolean",
+            "description": "L'agente tiene una sessione propria e la prosegue finche' resta lo stesso servizio nella stessa sessione del router (ADR-022): non rilegge da capo cio' che ha gia' letto. Il suo transcript resta in chiaro nella sua cartella, fuori dallo store del router: per questo assente vale false, e allora l'agente riceve l'ordine di non conservare nulla. Solo per l'adapter claude-code-cli."
+          },
+          "thinking": {
+            "type": "boolean",
+            "description": "Se il modello ragiona prima di rispondere (23 settembre 2026). false lo spegne: su una macchina senza GPU il ragionamento costa minuti anche per un saluto. Assente vale la scelta del modello. Lo scrive il setup dopo aver osservato che il modello ragiona e che si puo' spegnere, chiedendolo all'operatore. Solo per un servizio di chat dell'adapter ollama."
+          },
+          "keepAliveMinutes": {
+            "type": "integer",
+            "minimum": -1,
+            "description": "Quanto il modello resta in memoria di Ollama dopo l'ultimo uso, in minuti (23 settembre 2026): -1 finche' Ollama e' acceso, 0 si scarica subito. Assente lascia decidere a Ollama. Lo propone il setup dalla memoria del computer e dalla dimensione dei modelli, e l'operatore lo conferma o lo cambia. Solo per gli adapter ollama e ollama-embed."
+          },
+          "promptCaching": {
+            "type": "boolean",
+            "description": "Chiede al fornitore di tenere in cache l'inizio della conversazione, cosi' i token riletti a ogni turno costano meno (ADR-022). Il fornitore conserva il prompt per alcuni minuti: e' una scelta dell'operatore, assente vale false. Si dichiara solo per l'adapter anthropic; i servizi compatibili OpenAI lo fanno da soli sul prefisso, senza che lo si chieda."
+          },
+          "toolCalling": {
+            "type": "boolean",
+            "description": "Il servizio sa usare strumenti (ADR-020). Si dichiara solo per le API remote di chat, che non lo lasciano osservare; per un modello locale lo osserva la probe dal modello installato."
+          },
+          "pricing": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Prezzo a consumo per milione di token, per stimare quanto costa una richiesta. Senza prezzo un servizio in abbonamento o con inferenza su una macchina dell'operatore vale zero; un servizio di terzi resta sconosciuto. Tutti i prezzi del registro devono usare la stessa valuta.",
+            "required": [
+              "currency",
+              "inputPerMillionTokens",
+              "outputPerMillionTokens"
+            ],
+            "properties": {
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$",
+                "description": "Codice ISO 4217."
+              },
+              "inputPerMillionTokens": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Prezzo di un milione di token in ingresso."
+              },
+              "outputPerMillionTokens": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Prezzo di un milione di token in uscita."
+              }
+            }
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "description": "Posizione nell'ordine dei modelli dell'operatore, 1 = il piu' capace (ADR-027). Pari posizione, pari capacita'. Solo per chat e agenti. E' l'unica scala della qualita' (ADR-032, fase 3): il router ne ricava i livelli di capacita' per la selezione del minimo sufficiente e la componente di qualita' del punteggio (fra i servizi accesi che rispondono e hanno un posto, il posto p su n vale 1 - (p-1)/n; senza posto vale neutro). Sostituisce i voti per abilita' ('ratings'), che 'pa config migrate' converte."
+          },
+          "levels": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Correzioni per dimensione dell'operatore, da 1 a 3 (ADR-027). Un valore assente si ricava dall'ordine dei modelli; il contesto dalla finestra dichiarata. Solo per chat e agenti.",
+            "properties": {
+              "general": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3,
+                "description": "Livello generale."
+              },
+              "reasoning": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3,
+                "description": "Ragionamento."
+              },
+              "coding": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3,
+                "description": "Codice."
+              },
+              "context": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3,
+                "description": "Lavoro su testi lunghi."
+              }
+            }
+          },
+          "calibration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "latency": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "value",
+                  "source"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "declared",
+                      "measured"
+                    ]
+                  },
+                  "observedAt": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Una collocazione locale non ammette un endpoint remoto: la regola di rete e' applicata anche dallo schema, non solo dal client (ADR-016).",
+      "properties": {
+        "services": {
+          "items": {
+            "if": {
+              "properties": {
+                "inferencePlacement": {
+                  "const": "loopback"
+                }
+              },
+              "required": [
+                "inferencePlacement"
+              ]
+            },
+            "then": {
+              "properties": {
+                "endpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^https?://(127\\.0\\.0\\.1|\\[::1\\])(:\\d{1,5})?/?$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Una collocazione lan ammette solo un indirizzo privato numerico: un nome non identifica la macchina che la collocazione promette (ADR-016).",
+      "properties": {
+        "services": {
+          "items": {
+            "if": {
+              "properties": {
+                "inferencePlacement": {
+                  "const": "lan"
+                }
+              },
+              "required": [
+                "inferencePlacement"
+              ]
+            },
+            "then": {
+              "properties": {
+                "endpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^https?://(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.(1[6-9]|2\\d|3[01])\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3}|\\[[fF][cCdD][0-9a-fA-F]{2}:[0-9a-fA-F:]*\\])(:\\d{1,5})?/?$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Un servizio che esce dalla macchina parla solo in TLS: il certificato viene verificato e nessun redirect viene seguito. Puo' avere un prefisso di percorso che finisce con /, per i fornitori che mettono il progetto nell'indirizzo (23 settembre 2026); mai query ne' frammento.",
+      "properties": {
+        "services": {
+          "items": {
+            "if": {
+              "properties": {
+                "inferencePlacement": {
+                  "enum": [
+                    "private_remote",
+                    "third_party"
+                  ]
+                }
+              },
+              "required": [
+                "inferencePlacement"
+              ]
+            },
+            "then": {
+              "properties": {
+                "endpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^https://[^\\s/?#]+(/([^\\s?#/]+/)*)?$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "observedAt"
+      ],
+      "properties": {
+        "by": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "observedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Data scritta prima della fase 4 di ADR-032: facoltativa, conservata come dato, non decide nulla."
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    }
+  }
+}

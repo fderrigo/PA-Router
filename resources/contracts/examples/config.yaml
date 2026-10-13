@@ -1,0 +1,54 @@
+schemaVersion: 2
+language: en
+defaultProfileId: base-esempio
+policyFiles:
+- policies/base-esempio.yaml
+- policies/dev-personal.yaml
+- policies/chatbot-local.yaml
+- policies/public-administration.yaml
+registryFile: registry.yaml
+contentMode: memory_only
+preferSubscription: true
+api:
+  host: 127.0.0.1
+  port: 7071
+  serviceProfileId: chatbot-local
+  serviceTokenRef: api-service-token
+  projectId: 00000000-0000-4000-8000-000000000001
+telemetry:
+  exporter: none
+  endpoint: null
+retention:
+  auditDays: 30
+  contentDays: 7
+  eventHours: 24
+limits:
+  maxConcurrency: 4
+  timeoutSeconds: 300
+  maxAttempts: 2
+  maxInputBytes: 65536
+  maxContextBytes: 524288
+  maxOutputBytes: 524288
+memory:
+  enabled: true
+  required: false
+  topK: 5
+  maxChunksPerProject: 20000
+  cacheMiB: 256
+  retentionDays: 90
+  embeddingServiceId: null
+  maxEmbeddingDimension: 2048
+extensions:
+  enabled: true
+  pluginRoot: plugins
+  allowExecutableTools: false
+routing:
+  piiLatencyBudgetMs: 1500
+tools:
+  enabled: false
+  limits:
+    maxRounds: 8
+    maxCallsPerRound: 8
+    maxCalls: 32
+    callTimeoutSeconds: 30
+    maxResultBytes: 65536

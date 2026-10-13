@@ -1,0 +1,217 @@
+schemaVersion: 2
+revision: beta-v2
+services:
+- id: chat-locale
+  capability: chat
+  adapter: ollama
+  enabled: false
+  inferencePlacement: loopback
+  endpoint: http://127.0.0.1:11434
+  model: REPLACE_WITH_INSTALLED_LOCAL_MODEL
+  authMode: none
+  capabilities:
+  - chat
+  controls:
+  - closed_payload
+  - local_inference
+  processingRegions: []
+  # `local_inference` non si osserva da questo processo: che nessun byte lasci la macchina e' una verifica
+  # d'ambiente. Il servizio lo dichiara, l'operatore lo conferma qui dopo averlo verificato, con il proprio nome e
+  # la data. Finche' questo blocco resta un segnaposto la conferma manca e il servizio vale come un terzo (ADR-032,
+  # fase 4): una modalita' che tiene i dati su questo computer non lo usa, e `pa doctor` lo dice. La conferma non
+  # scade; ogni anno doctor ricorda di ricontrollarla.
+  attestations:
+    local_inference:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+  contextWindowTokens: 8192
+  maxOutputTokens: 2048
+  maxConcurrent: 1
+  calibration:
+    latency:
+      value: 0.8
+      source: declared
+- id: embedding-locale
+  capability: embedding
+  adapter: ollama-embed
+  enabled: false
+  inferencePlacement: loopback
+  endpoint: http://127.0.0.1:11434
+  model: REPLACE_WITH_LOCAL_EMBEDDING_MODEL
+  dimension: 1024
+  fingerprint: null
+  authMode: none
+  processingRegions: []
+  maxConcurrent: 1
+  calibration:
+    latency:
+      value: 0.5
+      source: declared
+- id: pii-locale
+  capability: pii-detection
+  adapter: onnx-local
+  enabled: false
+  inferencePlacement: loopback
+  model: REPLACE_WITH_LOCAL_PII_MODEL
+  authMode: none
+  processingRegions: []
+  maxConcurrent: 1
+  throughputKibPerSecond: null
+- id: codex-locale
+  capability: code-agent
+  adapter: codex-cli
+  enabled: false
+  inferencePlacement: loopback
+  executable: C:/REPLACE_WITH_VERIFIED_PATH/codex.exe
+  arguments:
+  - "--oss"
+  - "--local-provider"
+  - ollama
+  - "--ephemeral"
+  authMode: subscription
+  capabilities:
+  - chat
+  - code_read
+  - file_write
+  - shell
+  controls:
+  - local_inference
+  - no_nested_tools
+  - config_isolated
+  - no_persistent_transcript
+  - no_nested_fallback
+  - native_agent
+  - workspace_write
+  - shell_control
+  processingRegions: []
+  attestations:
+    local_inference:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+      note: "attestare dopo aver verificato che con --oss il traffico resti su loopback"
+    no_nested_tools:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+      note: "attestare dopo aver osservato che nessun server MCP viene caricato"
+    config_isolated:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+      note: "attestare dopo aver osservato questo controllo sulla versione installata"
+    no_persistent_transcript:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+      note: "attestare dopo aver osservato questo controllo sulla versione installata"
+    no_nested_fallback:
+      by: REPLACE_WITH_OPERATOR
+      observedAt: null
+      note: "attestare dopo aver osservato questo controllo sulla versione installata"
+  contextWindowTokens: 8192
+  maxOutputTokens: 2048
+  maxConcurrent: 1
+- id: codex-cloud
+  capability: code-agent
+  adapter: codex-cli
+  enabled: false
+  inferencePlacement: third_party
+  executable: C:/REPLACE_WITH_VERIFIED_PATH/codex.exe
+  arguments: []
+  authMode: subscription
+  capabilities:
+  - chat
+  - code_read
+  - file_write
+  - shell
+  controls:
+  - native_agent
+  - workspace_write
+  - shell_control
+  - config_isolated
+  processingRegions:
+  - us
+  contextWindowTokens: 200000
+  maxOutputTokens: 8192
+  maxConcurrent: 1
+- id: claude-code-cloud
+  capability: code-agent
+  adapter: claude-code-cli
+  enabled: false
+  inferencePlacement: third_party
+  executable: C:/REPLACE_WITH_VERIFIED_PATH/claude.exe
+  arguments:
+  - "--restricted"
+  - "--strict-mcp-config"
+  authMode: subscription
+  capabilities:
+  - chat
+  - code_read
+  - file_write
+  - shell
+  controls:
+  - native_agent
+  - workspace_write
+  - shell_control
+  - config_isolated
+  processingRegions:
+  - us
+  contextWindowTokens: 200000
+  maxOutputTokens: 8192
+  maxConcurrent: 1
+- id: opencode-locale
+  capability: code-agent
+  adapter: opencode-cli
+  enabled: false
+  inferencePlacement: loopback
+  executable: "C:/REPLACE_WITH_VERIFIED_PATH/opencode.exe"
+  arguments:
+  - "--pure"
+  authMode: none
+  capabilities:
+  - chat
+  - code_read
+  - file_write
+  - shell
+  controls: []
+  processingRegions: []
+  maxConcurrent: 1
+- id: chat-remoto
+  capability: chat
+  adapter: openai-compatible
+  enabled: false
+  inferencePlacement: third_party
+  endpoint: https://REPLACE_WITH_VERIFIED_HOST/
+  model: REPLACE_WITH_OFFERED_MODEL
+  authMode: api_key
+  secretRef: chat-remoto-key
+  capabilities:
+  - chat
+  controls:
+  - closed_payload
+  processingRegions: []
+  contextWindowTokens: 128000
+  maxOutputTokens: 8192
+  maxConcurrent: 1
+  calibration:
+    latency:
+      value: 0.5
+      source: declared
+- id: chat-anthropic
+  capability: chat
+  adapter: anthropic
+  enabled: false
+  inferencePlacement: third_party
+  endpoint: https://REPLACE_WITH_VERIFIED_HOST/
+  model: REPLACE_WITH_OFFERED_MODEL
+  authMode: api_key
+  secretRef: chat-anthropic-key
+  capabilities:
+  - chat
+  controls:
+  - closed_payload
+  processingRegions: []
+  contextWindowTokens: 200000
+  maxOutputTokens: 8192
+  maxConcurrent: 1
+  calibration:
+    latency:
+      value: 0.5
+      source: declared

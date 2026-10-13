@@ -1,0 +1,225 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "profileId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 60,
+      "description": "Nome dato dall'operatore al profilo, mostrato al posto dell'identificatore. E' un dato: il codice non conosce nomi ne' identificatori di profilo. Non sostituisce profileId, a cui sono legate sessioni e configurazione. Assente significa che si mostra l'identificatore."
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimumDataClass": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "personal",
+            "sensitive",
+            "secret",
+            "unknown"
+          ]
+        },
+        "allowedServiceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "minItems": 0,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "description": "Servizi ammessi dal profilo. L'identificatore deve esistere nel registro. Assente o vuoto vuol dire ogni servizio (ADR-032, fase 4); compilato, la modalita' usa solo quelli."
+        },
+        "allowedCapabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "chat",
+              "code_read",
+              "file_write",
+              "shell"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "redactContacts": {
+          "type": "boolean"
+        },
+        "allowedExtensionPermissions": {
+          "$comment": "Dalla S85 i permessi delle estensioni non esistono piu': la lista deve essere vuota. Il campo resta obbligatorio perche' i profili gia' scritti lo dichiarano; 'pa config migrate' lo azzera dichiarando la modifica.",
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 0
+        },
+        "allowLocalMemoryProcessing": {
+          "type": "boolean"
+        },
+        "toolLimits": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Limiti del giro modello-strumento imposti dal profilo (ADR-020): restringono quelli della configurazione, non li allargano.",
+          "properties": {
+            "maxRounds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            },
+            "maxCallsPerRound": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            },
+            "maxCalls": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64
+            },
+            "callTimeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 120
+            },
+            "maxResultBytes": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 262144
+            }
+          }
+        },
+        "personalDataGrading": {
+          "type": "string",
+          "enum": [
+            "graded",
+            "strict"
+          ],
+          "description": "Come il profilo gradua il dato personale (ADR-029). graded: un nome da solo e' dato ordinario (personal); un identificativo diretto — codice fiscale, documento, IBAN, carta — o un nome con un indirizzo e' dato stretto (sensitive). strict: qualunque dato personale e' stretto. Assente vale graded."
+        },
+        "zones": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maxZone"
+          ],
+          "description": "Zone di fiducia (ADR-029): dal 25 settembre 2026 (ADR-032, fase 4) l'unica regola su dove vanno i dati. La zona di un servizio si ricava da collocazione e conferme effettive: same_host (loopback con elaborazione locale confermata), lan (rete locale con elaborazione locale confermata), private_eu (private_remote con tutti i luoghi in UE), third_party_dpa (terzi con processing_agreement confermato), third_party (ogni altra destinazione, compreso un servizio locale senza elaborazione locale confermata). Il perimetro e' fisso: same_host, lan, private_eu.",
+          "properties": {
+            "maxZone": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "public",
+                "internal",
+                "personal",
+                "sensitive"
+              ],
+              "description": "Zona piu' lontana ammessa per ciascuna classe. secret e unknown non escono mai dalla rete locale e non si dichiarano.",
+              "properties": {
+                "public": {
+                  "type": "string",
+                  "enum": [
+                    "same_host",
+                    "lan",
+                    "private_eu",
+                    "third_party_dpa",
+                    "third_party"
+                  ]
+                },
+                "internal": {
+                  "type": "string",
+                  "enum": [
+                    "same_host",
+                    "lan",
+                    "private_eu",
+                    "third_party_dpa",
+                    "third_party"
+                  ]
+                },
+                "personal": {
+                  "type": "string",
+                  "enum": [
+                    "same_host",
+                    "lan",
+                    "private_eu",
+                    "third_party_dpa",
+                    "third_party"
+                  ]
+                },
+                "sensitive": {
+                  "type": "string",
+                  "enum": [
+                    "same_host",
+                    "lan",
+                    "private_eu",
+                    "third_party_dpa",
+                    "third_party"
+                  ]
+                }
+              }
+            },
+            "confirmOutside": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "sensitive"
+                ]
+              },
+              "description": "Classi che escono dal perimetro fisso (same_host, lan, private_eu) solo con la conferma dell'operatore nel terminale. L'API non la chiede mai e nega."
+            },
+            "attachmentsOutsidePerimeter": {
+              "type": "boolean",
+              "description": "Vero se un turno con allegati puo' uscire dal perimetro fisso; l'uscita si registra. Assente: false."
+            },
+            "weakPerimeter": {
+              "type": "string",
+              "enum": [
+                "deny",
+                "declare"
+              ],
+              "description": "Regola del perimetro debole, conservata. Dal 24 settembre 2026 (ADR-032, fase 3) non allenta piu' nulla. Assente: deny."
+            }
+          }
+        }
+      },
+      "required": [
+        "minimumDataClass",
+        "zones",
+        "allowedCapabilities",
+        "redactContacts",
+        "allowedExtensionPermissions",
+        "allowLocalMemoryProcessing"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "revision",
+    "profileId",
+    "constraints"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PA Router policy v1"
+}

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+    <ProjectReference Include="..\PA.Router.Privacy\PA.Router.Privacy.csproj" />
+    <ProjectReference Include="..\PA.Router.Policy\PA.Router.Policy.csproj" />
+    <ProjectReference Include="..\PA.Router.Registry\PA.Router.Registry.csproj" />
+    <ProjectReference Include="..\PA.Router.Routing\PA.Router.Routing.csproj" />
+    <ProjectReference Include="..\PA.Router.Session\PA.Router.Session.csproj" />
+    <ProjectReference Include="..\PA.Router.Execution\PA.Router.Execution.csproj" />
+    <ProjectReference Include="..\PA.Router.Memory\PA.Router.Memory.csproj" />
+    <ProjectReference Include="..\PA.Router.Extensions\PA.Router.Extensions.csproj" />
+  </ItemGroup>
+
+</Project>

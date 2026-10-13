@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Hosting\PA.Router.Hosting.csproj" />
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+schemaVersion: 2
+revision: beta-v1
+profileId: base-esempio
+name: "Configurazione base d'esempio"
+constraints:
+  minimumDataClass: internal
+  allowedServiceIds:
+  - chat-locale
+  - codex-locale
+  - embedding-locale
+  - pii-locale
+  zones:
+    maxZone:
+      public: private_eu
+      internal: lan
+      personal: lan
+      sensitive: lan
+    confirmOutside: []
+    attachmentsOutsidePerimeter: false
+    weakPerimeter: declare
+  allowedCapabilities:
+  - chat
+  redactContacts: true
+  allowedExtensionPermissions: []
+  allowLocalMemoryProcessing: true

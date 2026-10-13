@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.sln text eol=crlf
+*.png binary
+*.zip binary
+
+# Il pacchetto documentale viene conservato byte per byte: MANIFEST.sha256 resta
+# verificabile dopo un clone. Nessuna normalizzazione dei fine riga sotto docs/.
+docs/** -text

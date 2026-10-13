@@ -1,0 +1,66 @@
+{
+  "version": "demand-v3",
+  "description": "Soglie del pre-check, elenco dei casi banali e regole della trasformazione (ADR-025). Cambiare un valore qui cambia la versione: ogni decisione registrata dice con quale versione e' stata presa. demand-v2 (ADR-031): il contesto impone un minimo solo da 16384 byte. demand-v3 (24 settembre 2026, decisione dell'operatore: nel dubbio locale, la privacy prima di tutto): una confidenza bassa non alza piu' il livello, e senza giudizio dell'analizzatore vale il minimo che le misure impongono. Salire costava il cloud a domande facili; la privacy resta ai suoi controlli, indipendenti da questo passo.",
+  "trivial": {
+    "maxWords": 6,
+    "exact": [
+      "ciao",
+      "salve",
+      "buongiorno",
+      "buonasera",
+      "buonanotte",
+      "grazie",
+      "grazie mille",
+      "ok",
+      "ok grazie",
+      "ok perfetto",
+      "perfetto",
+      "va bene",
+      "tutto bene",
+      "come stai",
+      "ciao come stai",
+      "buonasera tutto bene",
+      "hello",
+      "hi",
+      "hey",
+      "thanks",
+      "thank you",
+      "thanks that s all",
+      "good morning",
+      "good evening",
+      "bye",
+      "hola",
+      "gracias",
+      "bonjour",
+      "merci",
+      "ola",
+      "obrigado",
+      "privet",
+      "spasibo",
+      "arrivederci",
+      "a presto"
+    ],
+    "translatePrefixes": [
+      "traduci",
+      "translate",
+      "traduce",
+      "traduis",
+      "traduz"
+    ]
+  },
+  "forced": {
+    "tier3": {
+      "contextBytes": 65536,
+      "attachments": 3,
+      "codeLines": 200
+    },
+    "tier2": {
+      "contextBytes": 16384,
+      "attachments": 1,
+      "codeLines": 40
+    }
+  },
+  "lowConfidence": 0.5,
+  "raiseOnLowConfidence": false,
+  "tierWithoutSignals": 1
+}

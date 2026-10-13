@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <!-- Protezione chiave su Windows (ADR-006); gate Windows-only verificato in S02. -->
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Il DDL normativo resta in docs/06-contracts/storage: incluso come risorsa, non copiato,
+         cosi' non puo' divergere dal contratto. LogicalName esplicito per non dipendere dalla
+         derivazione automatica del nome. -->
+    <EmbeddedResource Include="..\..\resources\contracts\storage\001_initial.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.001_initial.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\002_memory_extensions.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.002_memory_extensions.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\003_memory_routing.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.003_memory_routing.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\004_memory_demotion.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.004_memory_demotion.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\005_embedding_dimension.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.005_embedding_dimension.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\006_tool_attestations.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.006_tool_attestations.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\007_tool_calling_state.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.007_tool_calling_state.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\008_session_names.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.008_session_names.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\009_denial_decisions.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.009_denial_decisions.sql" />
+    <EmbeddedResource Include="..\..\resources\contracts\storage\010_grants_without_permissions.sql"
+                      LogicalName="PA.Router.Infrastructure.Storage.Migrations.010_grants_without_permissions.sql" />
+  </ItemGroup>
+
+</Project>

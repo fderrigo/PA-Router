@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <!-- Composition root condivisa. Nessun riferimento a Runtime: eviterebbe un ciclo. -->
+    <ProjectReference Include="..\PA.Router.Core\PA.Router.Core.csproj" />
+    <ProjectReference Include="..\PA.Router.Infrastructure\PA.Router.Infrastructure.csproj" />
+    <ProjectReference Include="..\PA.Router.Search.Local\PA.Router.Search.Local.csproj" />
+    <ProjectReference Include="..\PA.Router.Embeddings.Ollama\PA.Router.Embeddings.Ollama.csproj" />
+    <ProjectReference Include="..\PA.Router.Adapters.Ollama\PA.Router.Adapters.Ollama.csproj" />
+    <ProjectReference Include="..\PA.Router.Adapters.Codex\PA.Router.Adapters.Codex.csproj" />
+    <ProjectReference Include="..\PA.Router.Adapters.OpenCode\PA.Router.Adapters.OpenCode.csproj" />
+    <ProjectReference Include="..\PA.Router.Adapters.ClaudeCode\PA.Router.Adapters.ClaudeCode.csproj" />
+    <!-- Rilevatore PII locale: le dipendenze native restano confinate in quel progetto. -->
+    <ProjectReference Include="..\PA.Router.Detectors.Onnx\PA.Router.Detectors.Onnx.csproj" />
+    <ProjectReference Include="..\PA.Router.Adapters.Anthropic\PA.Router.Adapters.Anthropic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Il seam del controllo di drift dell'handover: la prova verifica il confronto invece di
+         correre con il filesystem. -->
+    <InternalsVisibleTo Include="PA.Router.EndToEndTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Prompt di sistema dell'analizzatore della richiesta (ADR-026): versionato con la trasformazione del profilo. -->
+    <EmbeddedResource Include="Runtime\Analyzer\analyzer-v2.txt" LogicalName="PA.Router.Hosting.Analyzer.analyzer-v2.txt" />
+    <EmbeddedResource Include="Runtime\Analyzer\analyzer-benchmarks.json" LogicalName="PA.Router.Hosting.Analyzer.analyzer-benchmarks.json" />
+    <!-- Frasi prototipo, soglia e regole della persona per l'art. 9 in ombra (ADR-028). -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- FTS5 in-memory: SQLite embedded, nessun database server. -->
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+  </ItemGroup>
+
+</Project>

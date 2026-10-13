@@ -1,0 +1,149 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:)[A-Za-z0-9_./-]+$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 128
+    },
+    "permissions": {
+      "$comment": "Dalla S85 un pacchetto porta solo testo di skill e nessun percorso di esecuzione consuma un permesso: la lista deve essere vuota. Il campo resta obbligatorio perche' i manifesti gia' installati lo dichiarano e la radice non ammette proprieta' sconosciute.",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 0
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1024
+          },
+          "entry": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:)[A-Za-z0-9_./-]+$"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:)[A-Za-z0-9_./-]+$"
+            },
+            "minItems": 0,
+            "maxItems": 32
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "entry",
+          "resources"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 32
+    },
+    "tools": {
+      "$comment": "Dalla S81 un pacchetto porta solo testo e risorse: la lista deve essere vuota. Il campo resta obbligatorio perche' i manifesti gia' installati lo dichiarano e la radice non ammette proprieta' sconosciute.",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 0
+    },
+    "nativeBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "claude-code-cli",
+              "codex-cli"
+            ]
+          },
+          "pluginId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "versionRange": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "configDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "provider",
+          "pluginId",
+          "versionRange",
+          "configDigest"
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 8
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "description",
+    "files",
+    "permissions",
+    "skills",
+    "tools",
+    "nativeBindings"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PA Router plugin manifest v1"
+}

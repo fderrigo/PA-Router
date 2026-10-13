@@ -1,0 +1,31 @@
+schemaVersion: 2
+revision: beta-v1
+profileId: dev-personal
+name: "Lavoro sul codice con un agente"
+constraints:
+  minimumDataClass: internal
+  allowedServiceIds:
+  - claude-code-cloud
+  - chat-locale
+  - codex-cloud
+  - codex-locale
+  - opencode-locale
+  - embedding-locale
+  - pii-locale
+  zones:
+    maxZone:
+      public: third_party
+      internal: third_party
+      personal: lan
+      sensitive: lan
+    confirmOutside: []
+    attachmentsOutsidePerimeter: false
+    weakPerimeter: declare
+  allowedCapabilities:
+  - chat
+  - code_read
+  - file_write
+  - shell
+  redactContacts: false
+  allowedExtensionPermissions: []
+  allowLocalMemoryProcessing: true

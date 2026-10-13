@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Sdk\PA.Router.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Class library: gli endpoint sono montati dall'host, nessun web server proprio. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

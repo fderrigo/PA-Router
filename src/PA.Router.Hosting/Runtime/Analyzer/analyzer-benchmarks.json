@@ -1,0 +1,17 @@
+{
+  "description": "Esiti del benchmark dell'analizzatore (ADR-026, ADR-031). Il modo 'decisive' vale solo per un modello e una versione del prompt elencati qui con una sotto-stima migliore di quella delle regole. Un'altra macchina rifa' il benchmark con eng/bench-analyzer e aggiunge la propria riga: non si aggiunge una riga senza una misura.",
+  "entries": [
+    {
+      "model": "qwen3:4b",
+      "prompt": "analyzer-v2",
+      "machine": "i5-1334U, 16 GB, Ollama 0.34.0",
+      "measuredOn": "2026-09-22",
+      "requests": 210,
+      "reviewedByOperator": 86,
+      "underRouting": 0.014,
+      "rulesUnderRouting": 0.695,
+      "medianSecondsWarm": 3.7,
+      "evidence": "docs/07-delivery/evidence/S120, S122"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <!-- Soglie, elenco dei casi banali e regola di confidenza del profilo di domanda (ADR-025): versionati, non nel codice. -->
+    <EmbeddedResource Include="Demand\demand-v3.json" LogicalName="PA.Router.Routing.Demand.demand-v3.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

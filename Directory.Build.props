@@ -1,0 +1,44 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- LangVersion resta quella stabile dello SDK: preview vietata da CODING-STANDARDS. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+    <NeutralLanguage>en</NeutralLanguage>
+    <!-- Versione del prodotto (S20). E' la stessa che il worker confronta all'handshake IPC:
+         client e worker di versioni diverse non si parlano, ed e' voluto.
+         Il minor sale a 0.2 in S32: la versione 2 ha cambiato i contratti in modo rompente
+         (services al posto di targets, migrazioni 003/004), e un client 0.1 non deve parlare
+         con un worker 0.2 nemmeno per sbaglio. -->
+    <Version>0.2.0-beta.3</Version>
+    <!-- I pacchetti sono autonomi, uno per piattaforma. I RID sono dichiarati qui perche' i file
+         di lock contengano anche il loro grafo: senza, la pubblicazione li riscriverebbe e il
+         restore bloccato fallirebbe al controllo successivo. linux-x64 entra in S32 con la porta:
+         il runtime nativo di SQLite e di ONNX Runtime cambia con la piattaforma, quindi va
+         bloccato insieme al resto. -->
+    <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Gate S01: restore riproducibile con lock file versionati. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <NuGetAudit>true</NuGetAudit>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+</Project>

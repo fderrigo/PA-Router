@@ -1,0 +1,23 @@
+schemaVersion: 2
+revision: beta-v1
+profileId: chatbot-local
+name: "Motore per una mia applicazione"
+constraints:
+  minimumDataClass: personal
+  allowedServiceIds:
+  - chat-locale
+  - embedding-locale
+  zones:
+    maxZone:
+      public: private_eu
+      internal: lan
+      personal: lan
+      sensitive: lan
+    confirmOutside: []
+    attachmentsOutsidePerimeter: false
+    weakPerimeter: deny
+  allowedCapabilities:
+  - chat
+  redactContacts: true
+  allowedExtensionPermissions: []
+  allowLocalMemoryProcessing: true

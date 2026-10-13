@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>pa</AssemblyName>
+    <RootNamespace>PA.Router.Cli</RootNamespace>
+    <!-- UI resource selection only; invariant numeric/date formatting remains enabled. -->
+    <PredefinedCulturesOnly>false</PredefinedCulturesOnly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Sdk\PA.Router.Sdk.csproj" />
+    <ProjectReference Include="..\PA.Router.Api\PA.Router.Api.csproj" />
+    <ProjectReference Include="..\PA.Router.Runtime\PA.Router.Runtime.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="Spectre.Console" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Localization\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Localization\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PA.Router.EndToEndTests" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,52 @@
+namespace PA.Router.Abstractions;
+
+/// <summary>
+/// Codici errore stabili v1 di 03-specs/ERRORS.md. Il valore numerico non e' parte del
+/// contratto: la serializzazione usa sempre la stringa wire di <see cref="ErrorCodes"/>.
+/// </summary>
+public enum ErrorCode
+{
+    PolicyInvalid,
+    InputInvalid,
+    NoAdmissibleTarget,
+    ControlUnavailable,
+    Busy,
+    TargetUnavailable,
+    AuthUnavailable,
+    QuotaExhausted,
+    ProviderTimeout,
+    ProtocolError,
+    OutputLimit,
+    OutputBlocked,
+    ContextLimit,
+    ContextChanged,
+    ContextUnavailable,
+    StoreUnavailable,
+    StoreInUse,
+    ContentUnavailable,
+    CryptoUnavailable,
+    Cancelled,
+    SideEffectUncertain,
+    MemoryUnavailable,
+    EmbeddingUnavailable,
+    MemoryScopeDenied,
+    MemoryLimit,
+    MemoryIndexFailed,
+    EmbeddingVersionMismatch,
+    ExtensionPermissionDenied,
+    WorkspaceBusy,
+    SessionBusy,
+    RuntimeVersionMismatch,
+    WorkspaceDirty,
+    ToolSourceMissing,
+    ToolSourceUnavailable,
+    ToolNotAttested,
+    ToolAttestationRejected,
+    ToolChanged,
+    ToolCredentialsMissing,
+    ToolCredentialsRejected,
+    ToolArgumentsDenied,
+    ToolResultDenied,
+    NoToolCapableModel,
+    ToolLimit,
+}

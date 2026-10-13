@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PA.Router.Abstractions\PA.Router.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Runtime di inferenza e tokenizer restano confinati in questo progetto, come in
+         Detectors.Onnx: il nucleo non acquisisce dipendenze native per una capacita' che
+         l'operatore puo' non installare. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" />
+  </ItemGroup>
+
+</Project>
