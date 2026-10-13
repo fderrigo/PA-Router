@@ -17,6 +17,12 @@ Nei pacchetti PA Router sono inclusi il testo Apache 2.0 e il NOTICE di SQLitePC
 
 La [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) permette anche usi commerciali, a condizione di rispettarne i termini. PA Router non revoca tali diritti sui componenti Apache, né la loro presenza rende automaticamente Apache il codice originale PA Router. Non è dichiarata alcuna affiliazione o approvazione da parte della Apache Software Foundation.
 
+## Modello facoltativo RizzoPII
+
+PA Router può usare il modello esterno [`rizzoaiacademy/rizzo-pii-0.3B`](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B) per il rilevamento locale di entità personali. Autore: **Simone Rizzo / Rizzo AI Academy**. La [scheda del modello](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B) dichiara **MIT © 2026 Simone Rizzo**. Questo modello **non è incluso** nel sorgente o negli archivi binari PA Router e quindi non compare fra i 22 componenti effettivamente distribuiti o nell'SBOM. L'operatore lo acquisisce e abilita separatamente, rispettando i termini applicabili ai pesi.
+
+Il [repository dell'applicazione autonoma RizzoPII](https://github.com/Rizzo-AI-Academy/rizzo-pii) dichiara MIT per il proprio sorgente e AGPL-3.0 per i suoi binari che incorporano PyMuPDF. PA Router non distribuisce quell'applicazione né PyMuPDF. La licenza Apache 2.0 elencata sopra riguarda SQLitePCLRaw, **non** il modello RizzoPII. Nessuna licenza di un terzo trasferisce la titolarità del codice originale PA Router.
+
 ## Inventario della release
 
 | Componente | Versione | Licenza / testi distribuiti |

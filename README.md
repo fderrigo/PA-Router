@@ -32,6 +32,10 @@ Sono presenti integrazioni per **Ollama, API compatibili OpenAI, API Anthropic, 
 
 La richiesta e il contesto, inclusi eventuali ricordi e skill, attraversano l'analisi di privacy prima della scelta del servizio. Le policy stabiliscono quali dati e capacità possono raggiungere quali destinazioni; un divieto non viene compensato da un servizio più veloce o economico.
 
+Per riconoscere anche dati che una regola di formato può perdere, PA Router supporta facoltativamente il modello locale **[RizzoPII (`rizzo-pii-0.3B`)](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B)** di **Simone Rizzo / Rizzo AI Academy**. Il rilevatore cerca entità come nomi, indirizzi, documenti e identificativi italiani. Gira nel processo del router tramite ONNX e affianca i controlli deterministici, che restano necessari per credenziali e identificativi verificabili. Il modello segnala i dati: sono le regole di PA Router a decidere classe e destinazioni ammesse. Non è l'applicazione autonoma RizzoPII e non esegue il suo flusso completo di anonimizzazione reversibile.
+
+Il modello nasce **disabilitato**; i pesi non sono inclusi nei download e non vengono scaricati durante un turno. Per usarlo, l'operatore deve procurarsi i pesi dal titolare, convertirli nel formato ONNX supportato, installarli nella propria directory dati, abilitare il servizio `pii-detection` con adapter `onnx-local` e verificarlo con `pa doctor`. Una scansione avviata con il modello abilitato che non riesce a concludere è trattata come incompleta e blocca l'invio al cloud. Il rilevamento resta probabilistico: controlla i risultati prima di affidargli dati reali.
+
 Ogni invio richiede un'autorizzazione valida per quel payload e la registrazione dell'intenzione nell'audit. L'audit e la telemetria usano metadati controllati, senza includere intenzionalmente prompt e risposte grezze. Questi controlli riducono il rischio, ma non rendono infallibile il riconoscimento dei dati sensibili e non sostituiscono firewall o isolamento del sistema operativo.
 
 ### 3. Organizza il lavoro in sessioni
@@ -136,6 +140,8 @@ Copyright © 2026 **D'Errigo Filippo Francesco**, per il codice originale PA Rou
 **PA Router è source-available, non software open source con licenza approvata OSI.** Le dipendenze sono opere dei rispettivi autori e conservano le proprie condizioni, incluse Apache 2.0, MIT, BSD-3-Clause e gli accordi indicati nei pacchetti. La restrizione non commerciale di PA Router non viene imposta al codice di terzi; un'autorizzazione commerciale dell'autore di PA Router non sostituisce gli obblighi verso quei titolari.
 
 In particolare, i quattro pacchetti **SQLitePCLRaw 2.1.12 sono Apache-2.0**. I pacchetti **Json.More.Net, JsonPointer.Net e JsonSchema.Net** includono un accordo OSMFEULA per le distribuzioni binarie; il sorgente è MIT. L'[inventario delle dipendenze](THIRD-PARTY-NOTICES.md) spiega questi casi. Nei download trovi `SBOM.json`, `THIRD-PARTY-NOTICES.md` e `licenses/`, con i testi e gli avvisi da conservare nella redistribuzione.
+
+Il [modello RizzoPII](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B) è attribuito a **Simone Rizzo / Rizzo AI Academy** e la sua scheda dichiara **MIT**. I pesi sono un'opera esterna da ottenere separatamente: la licenza PolyForm di PA Router non li copre. L'[applicazione autonoma RizzoPII](https://github.com/Rizzo-AI-Academy/rizzo-pii) non fa parte dei nostri archivi; i suoi binari distribuiti dal titolare hanno condizioni proprie.
 
 ## Compilare dal sorgente
 
