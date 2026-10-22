@@ -128,23 +128,6 @@ Nel terminale interattivo usa `/help` per l'elenco aggiornato.
 
 Dalla CLI trovi anche `pa session`, `pa memory`, `pa plugin`, `pa skill`, `pa config`, `pa runtime`, `pa serve` e `pa maintenance`. Aggiungi `--help` al comando per argomenti e opzioni; `pa --continue --data <directory>` riprende l'ultima sessione disponibile. Un'esecuzione con effetti incerti richiede una verifica e il recupero previsto dal prodotto, senza retry automatici che possano duplicare gli effetti.
 
-## Sul blog
-
-Scheda del progetto nella sezione Labs di [derrigo.it](https://www.derrigo.it): [PA Router](https://www.derrigo.it/Products/Info/11/pa-router)
-
-Articoli correlati:
-
-- [PA Router: dal model routing alla governance dell'esecuzione AI](https://www.derrigo.it/Articles/Info/11/pa-router-dal-model-routing-alla-governance-dell-esecuzione-ai)
-- [Dall'algoritmo all'harness](https://www.derrigo.it/Articles/Info/9/dall-algoritmo-all-harness)
-- [Claude Code, Codex e Planoro: come abbiamo organizzato il nostro flusso di sviluppo](https://www.derrigo.it/Articles/Info/13/claude-code-codex-e-planoro-come-abbiamo-organizzato-il-nostro-flusso-di)
-- [Introdurre l'AI negli enti locali: oltre il chatbot per il cittadino](https://www.derrigo.it/Articles/Info/14/introdurre-l-ai-negli-enti-locali-oltre-il-chatbot-per-il-cittadino)
-- [Vibe coding](https://www.derrigo.it/Articles/Info/3/vibe-coding)
-- [Vibe coding: il codice lo mette l'AI, il giudizio no](https://www.derrigo.it/Articles/Info/5/vibe-coding-il-codice-lo-mette-l-ai-il-giudizio-no)
-- [Oltre il vibe coding: quando l'intelligenza artificiale partecipa anche alla verifica del software](https://www.derrigo.it/Articles/Info/12/oltre-il-vibe-coding-quando-l-intelligenza-artificiale-partecipa-anche-alla)
-- [Dove finisce la capacità che l'intelligenza artificiale libera](https://www.derrigo.it/Articles/Info/10/dove-finisce-la-capacita-che-l-intelligenza-artificiale-libera)
-
-Chi sono: [Filippo D'Errigo](https://www.derrigo.it/Pages/Info/1/chi-sono)
-
 ## Licenza, proprietà e uso commerciale
 
 Copyright © 2026 **D'Errigo Filippo Francesco**, per il codice originale PA Router di cui è titolare. La pubblicazione del sorgente concede i diritti indicati nella licenza, non trasferisce la titolarità del copyright.
@@ -178,3 +161,22 @@ Gli schemi JSON, i modelli YAML e le migrazioni SQL in `resources/contracts` son
 - Vulnerabilità: [segnalazione privata GitHub](https://github.com/fderrigo/PA-Router/security/advisories/new).
 
 Non allegare credenziali, database, backup, prompt privati o dati personali. La beta è distribuita senza SLA; garanzie e limitazioni sono definite nella licenza.
+
+## Approfondimenti
+
+Il progetto è presentato nella sezione Labs di [derrigo.it](https://www.derrigo.it): [PA Router](https://www.derrigo.it/Products/Info/11/pa-router).
+
+Articoli correlati:
+
+- [PA Router: dal model routing alla governance dell'esecuzione AI](https://www.derrigo.it/Articles/Info/11/pa-router-dal-model-routing-alla-governance-dell-esecuzione-ai)
+- [Vibe coding](https://www.derrigo.it/Articles/Info/3/vibe-coding)
+- [Vibe coding: il codice lo mette l'AI, il giudizio no](https://www.derrigo.it/Articles/Info/5/vibe-coding-il-codice-lo-mette-l-ai-il-giudizio-no)
+- [Dall'algoritmo all'harness](https://www.derrigo.it/Articles/Info/9/dall-algoritmo-all-harness)
+- [Dove finisce la capacità che l'intelligenza artificiale libera](https://www.derrigo.it/Articles/Info/10/dove-finisce-la-capacita-che-l-intelligenza-artificiale-libera)
+- [Oltre il vibe coding: quando l'intelligenza artificiale partecipa anche alla verifica del software](https://www.derrigo.it/Articles/Info/12/oltre-il-vibe-coding-quando-l-intelligenza-artificiale-partecipa-anche-alla)
+- [Claude Code, Codex e Planoro: come abbiamo organizzato il nostro flusso di sviluppo](https://www.derrigo.it/Articles/Info/13/claude-code-codex-e-planoro-come-abbiamo-organizzato-il-nostro-flusso-di)
+- [Introdurre l'AI negli enti locali: oltre il chatbot per il cittadino](https://www.derrigo.it/Articles/Info/14/introdurre-l-ai-negli-enti-locali-oltre-il-chatbot-per-il-cittadino)
+
+## Autore
+
+**Filippo D'Errigo** · [Chi sono](https://www.derrigo.it/Pages/Info/1/chi-sono) · [derrigo.it](https://www.derrigo.it) · [GitHub](https://github.com/fderrigo)
